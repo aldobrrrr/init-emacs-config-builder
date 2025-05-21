@@ -639,6 +639,12 @@ This is an Emacs minor mode to facilitate the process of writing text.
 
 ** Eshell
 
+*** Change key binding for shell command to use eshell command
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-!") 'eshell-command)
+#+end_src
+
 *** Add bcat function
 
 #+begin_src emacs-lisp
