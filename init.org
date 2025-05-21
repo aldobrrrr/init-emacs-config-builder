@@ -32,9 +32,7 @@ two files by [[* Automatic tangle config files when saved][this]] code.
 
 Most of the configurations of this file are taken from others during my Emacs
 learning process, but for the largest part I did not save the author so I can't
-report the source, I apologize in adavance for that.
-
-correct the grammar and express well in english
+report the source, I apologize in advance for that.
 
 Most of the configurations in this file were adapted from others during my
 Emacs learning process. Unfortunately, for the most part, I did not keep track
@@ -638,6 +636,12 @@ This is an Emacs minor mode to facilitate the process of writing text.
 * Shell
 
 ** Eshell
+
+*** Change key binding for shell command to use eshell command
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-!") 'eshell-command)
+#+end_src
 
 *** Add bcat function
 
