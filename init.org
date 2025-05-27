@@ -147,7 +147,7 @@ Add secrets (Secret API - GNOME Keyring) to the auth-sources
 
 #+begin_src emacs-lisp
   (setq auth-sources '(default
-                       "secrets:Login"
+                       "secrets:Default keyring"
                        "~/.authinfo.gpg"
                        "~/.authinfo"
                        "~/.netrc"))
