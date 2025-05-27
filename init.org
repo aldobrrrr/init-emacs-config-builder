@@ -1099,6 +1099,20 @@ And then it's possible to do =/ssh:userb@hostb:= to have access to the *hostb*
 passing through *hosta* in the same way as =ssh -J usera@hosta userb@hostb=
 command can do.
 
+It's also possible to use the pipe syntax to connect to a nested host:
+=C-x C-f /ssh:usera@hosta|ssh:userb@hostb:/path/to/file=
+
+It's very useful to add forward agent option (*-A*) to TRAMP ssh parameters, in
+this way it's possible to use our ssh key also with nested hosts.
+
+#+begin_src emacs-lisp
+  (add-to-list 'tramp-connection-properties
+               (list (regexp-quote "/ssh:")
+                     "login-args"
+                     '(("-A") ("-l" "%u") ("-p" "%p") ("%c")
+                       ("-e" "none") ("%h"))))
+#+end_src
+
 *** LXD TRAMP
 
 This add to TRAMP the possibility to connect to an LXD container in the same
