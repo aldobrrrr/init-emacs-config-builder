@@ -859,6 +859,7 @@ This enables auto-completion menu.
     ; completion-at-point-functions facility, and thus works with any major mode
     ; that uses the common protocol.
     (push 'company-capf company-backends)
+    (push 'company-ansible company-backends)
     (global-company-mode 1)
     )
 #+end_src
