@@ -885,7 +885,10 @@ the default completion system.
   (use-package savehist
     :ensure t
     :init
-    (savehist-mode))
+    (savehist-mode)
+    (add-to-list 'savehist-additional-variables 'kill-ring) ;; save also the kill
+                                                            ;; ring
+     )
 
   ;; Emacs minibuffer configurations.
   (use-package emacs
