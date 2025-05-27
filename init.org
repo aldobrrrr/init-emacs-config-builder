@@ -1220,6 +1220,62 @@ An alternative to Restclient which was removed from the MELPA repository
 
 * Syntax modes and programming stuffs
 
+** Language Server Protocol
+
+In combination with a language server it allows to transform Emacs into a
+complete IDE.
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :commands (lsp lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "s-l")
+    :hook
+    (
+     (lsp-mode lsp-enable-which-key-integration)
+     )
+    )
+#+end_src
+
+Install the *LSP UI* with the higher level UI modules of /lsp-mode/ like
+flycheck support and code lenses.
+
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode)
+#+end_src
+
+Install the *LSP Treemacs* to integrate a tree view when LSP mode is used.
+
+#+begin_src emacs-lisp
+  (use-package lsp-treemacs
+    :ensure t
+    :commands lsp-treemacs-errors-list)
+#+end_src
+
+For every *language* a *server is needed*. It's possible to download it with
+
+#+begin_src emacs-lisp :tangle no
+  (lsp-install-server)
+#+end_src
+
+** Flycheck
+
+Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs.
+
+Out of the box Flycheck supports over 40 different programming languages with
+more than 80 different syntax checking tools, and comes with a simple interface
+to define new syntax checkers.
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :config
+    (global-flycheck-mode))
+#+end_src
+
 ** Jinx (spell checker)
 
 Check and correct spelling.
@@ -1248,6 +1304,29 @@ A C compiler is also needed.
     (add-to-list 'vertico-multiform-categories
                  '(jinx grid (vertico-grid-annotate . 25)))
     )
+#+end_src
+
+** Projectile
+
+It is a project management library. It allows to navigate around code projects
+for various languages.
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config
+    (projectile-mode)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    )
+#+end_src
+
+** DAP (debugger)
+
+#+begin_src emacs-lisp
+  (use-package dap-mode
+    :ensure t
+    :after lsp-mode
+    :config (dap-auto-configure-mode))
 #+end_src
 
 ** JSON
@@ -1303,6 +1382,78 @@ content when JSON mode is enabled.
 #+begin_src emacs-lisp
   (use-package php-mode
     :ensure t)
+#+end_src
+
+** Java
+
+#+begin_src emacs-lisp
+  (use-package lsp-java
+    :ensure t
+    :config
+    (add-hook 'java-mode-hook 'lsp-deferred))
+#+end_src
+
+Load dap-java package
+
+#+begin_src emacs-lisp
+  (use-package dap-java
+    :ensure nil)
+#+end_src
+
+*** Project Lombok
+
+Project Lombok is a java library that automatically plugs into your editor and
+build tools, spicing up your java. Never write another getter or equals method
+again, with one annotation your class has a fully featured builder, Automate
+your logging variables, and much more.
+
+Lombok jar is needed it's possible to download from [[lombok-download-url][here]], or it's possible to
+run the following src code blocks in order.
+
+#+NAME: lombok-download-url
+#+begin_example
+https://projectlombok.org/downloads/lombok.jar
+#+end_example
+ 
+#+begin_src emacs-lisp
+  (setq lombok-dir (expand-file-name ".cache/java-lombok" user-emacs-directory))
+  (setq lombok-jar (concat lombok-dir "/lombok.jar"))
+#+end_src
+
+#+begin_src bash :var lombok_download_url=lombok-download-url lombok_dir=(print lombok-dir) lombok_jar=(print lombok-jar) :tangle no
+    mkdir -p "$lombok_dir"
+    wget "$lombok_download_url" -O "$lombok_jar"
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq lsp-java-vmargs
+        (list
+           "-noverify"
+           "-Xmx1G"
+           "-XX:+UseG1GC"
+           "-XX:+UseStringDeduplication"
+           (concat "-javaagent:" lombok-jar)))
+#+end_src
+
+*** Spring Boot
+
+#+begin_src emacs-lisp
+  (require 'lsp-java-boot)
+
+  ;; to enable the lenses
+  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+#+end_src
+
+** Typescript
+
+#+begin_src emacs-lisp
+  (use-package typescript-mode
+    :ensure t
+    :mode "\\.ts\\'"
+    :config
+    (add-hook 'typescript-mode-hook 'lsp-deferred)
+    (setq typescript-indent-level 2))
 #+end_src
 
 ** Enable some languages to be executed inside code blocks
