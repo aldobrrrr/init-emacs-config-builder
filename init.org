@@ -1000,6 +1000,32 @@ both during a minibuffer completion session and in normal buffers.
 For example it's possible to select a region, press "C-." and select a proper
 operation for that region, cool!
 
+** Which-key
+
+which-key is a minor mode for Emacs that displays the key bindings following
+your currently entered incomplete command (a prefix) in a popup.
+
+which-key is now included in the master branch of Emacs and will likely be
+released with Emacs v30, so from v30 the following block shouldn't be needed
+anymore.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config
+    (which-key-mode)
+    )
+#+end_src
+
+** Save current editor state
+
+In this way it's possible to restore the state and rapidly continue to work
+when Emacs is restarted.
+
+#+begin_src emacs-lisp :tangle no
+  (desktop-save-mode 1)
+#+end_src
+
 ** Expand region
 
 It allows to expand a region in a sematically correct way.
