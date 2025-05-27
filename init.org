@@ -879,7 +879,10 @@ the default completion system.
     (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
     (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
     :init
-    (vertico-mode))
+    (vertico-mode)
+    :config
+    (vertico-multiform-mode)
+    )
 
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
@@ -1216,6 +1219,36 @@ An alternative to Restclient which was removed from the MELPA repository
 #+end_src
 
 * Syntax modes and programming stuffs
+
+** Jinx (spell checker)
+
+Check and correct spelling.
+
+enchant2 is needed. With fedora:
+
+#+begin_src bash :tangle no
+  dnf install enchant2 enchant2-devel
+#+end_src
+
+A C compiler is also needed.
+
+#+begin_src emacs-lisp
+  (use-package jinx
+    :ensure t
+    :after vertico
+    :hook ((text-mode . jinx-mode)
+           (prog-mode . jinx-mode))
+    :bind (("C-;" . jinx-correct))
+    :custom
+    (jinx-camel-modes '(prog-mode))
+    (jinx-delay 0.1)
+    ;; set dictionaries of your choice
+    (jinx-languages "it_IT,en_US")
+    :config
+    (add-to-list 'vertico-multiform-categories
+                 '(jinx grid (vertico-grid-annotate . 25)))
+    )
+#+end_src
 
 ** JSON
 
