@@ -1313,6 +1313,7 @@ content when JSON mode is enabled.
    '((python . t)
      (C . t)
      (calc . t)
+     (dot . t)
      (latex . t)
      (java . t)
      (ruby . t)
