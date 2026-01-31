@@ -128,6 +128,14 @@ that.
   (defvar os-packages-path "~/.emacs.d/modes")
 #+end_src
 
+* Enable Emacs repos
+
+#+begin_src emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/") t)
+#+end_src
+
 * Security
 
 ** GNU Elpa keyring update
@@ -231,14 +239,6 @@ automatically be encrypted.
 #+begin_src emacs-lisp
   ;(setq-default auto-fill-function 'do-auto-fill)
   (setq-default fill-column 79)
-#+end_src
-
-* Enable Emacs repos
-
-#+begin_src emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 #+end_src
 
 * Themes
