@@ -118,8 +118,6 @@ that.
                         #'iecb/org-babel-tangle-config)))
 #+end_src
 
-* Some variables
-
 #+begin_src emacs-lisp
   (defvar os-terminal-path (replace-regexp-in-string "\n$" ""
                                                      (shell-command-to-string
