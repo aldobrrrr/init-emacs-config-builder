@@ -523,7 +523,8 @@ Eric J. M. Ritz.
     (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
     (add-to-list 'org-structure-template-alist '("bash" . "src bash"))
     (add-to-list 'org-structure-template-alist '("verb" . "src verb"))
-    (add-to-list 'org-structure-template-alist '("clang" . "src C")))
+    (add-to-list 'org-structure-template-alist '("java" . "src java :results output"))
+    (add-to-list 'org-structure-template-alist '("clang" . "src C :results output")))
 #+end_src
 
 * Emacs windows, buffers, ecc..
@@ -1419,6 +1420,53 @@ Load dap-java package
 #+begin_src emacs-lisp
   (use-package dap-java
     :ensure nil)
+=======
+<<<<<<< Updated upstream
+=======
+** Java
+
+Load dap-java package
+
+#+begin_src emacs-lisp
+  (use-package lsp-java
+    :after lsp-mode
+    :ensure t
+    :config
+    (setq lsp-java-content-provider-preferred "fernflower")
+    ;; Spring Boot
+    (require 'lsp-java-boot)
+    (add-hook 'lsp-mode-hook #'lsp-lens-mode)
+    (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+    )
+
+  (use-package lsp-java
+    :no-require
+    :hook
+    (java-mode . lsp-deferred))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package dap-java
+    :after lsp-java
+    :ensure nil
+    :config
+    (global-set-key (kbd "<f5>") #'dap-step-in)
+    (global-set-key (kbd "<f6>") #'dap-next)
+    (global-set-key (kbd "<f7>") #'dap-step-out)
+    (global-set-key (kbd "<f8>") #'dap-continue))
+#+end_src
+
+*** Eclipse Formatter
+
+Use Eclipse formatter with settings which are coming from [[https://github.com/redhat-developer/vscode-java/wiki/Formatter-settings][there]]
+
+#+begin_src emacs-lisp
+  (setq lsp-java-format-settings-url
+        "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+  (setq lsp-java-format-settings-profile "GoogleStyle")
+  (setq lsp-java-format-comments-enabled t)
+  (setq lsp-java-format-on-type-enabled t)
+>>>>>>> Stashed changes
 #+end_src
 
 *** Project Lombok
@@ -1464,6 +1512,28 @@ https://projectlombok.org/downloads/lombok.jar
   ;; to enable the lenses
   (add-hook 'lsp-mode-hook #'lsp-lens-mode)
   (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
+=======
+Lombok JAR is needed and it is automatically downloaded.
+
+#+begin_src emacs-lisp
+  (setq lombok-dir (expand-file-name ".cache/java-lombok" user-emacs-directory))
+  (setq lombok-jar (concat lombok-dir "/lombok.jar"))
+  (setq lombok-download-url "https://projectlombok.org/downloads/lombok.jar")
+
+  (make-directory lombok-dir t)
+  (unless (file-exists-p lombok-jar)
+    (url-copy-file lombok-download-url lombok-jar))
+
+  (setq lsp-java-vmargs
+          (list
+             "-XX:+UseParallelGC"
+             "-XX:GCTimeRatio=4"
+             "-XX:AdaptiveSizePolicyWeight=90"
+             "-Dsun.zip.disableMemoryMapping=true"
+             "-Xmx2G"
+             "-Xms100m"
+             (concat "-javaagent:" lombok-jar)))
+>>>>>>> Stashed changes
 #+end_src
 
 ** Typescript
