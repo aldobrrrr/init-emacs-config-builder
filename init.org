@@ -1113,6 +1113,8 @@ It's very useful to add forward agent option (*-A*) to TRAMP ssh parameters, in
 this way it's possible to use our ssh key also with nested hosts.
 
 #+begin_src emacs-lisp
+  (when (not (boundp 'tramp-connection-properties))
+    (setq tramp-connection-properties '()))
   (add-to-list 'tramp-connection-properties
                (list (regexp-quote "/ssh:")
                      "login-args"
