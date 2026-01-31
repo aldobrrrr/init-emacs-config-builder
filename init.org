@@ -654,12 +654,12 @@ This is an Emacs minor mode to facilitate the process of writing text.
     "Output the contents of one or more buffers as a string. "
     ;; Convert args (either buffer refs or strings) into buffers:
     (let ((buffers (mapcar #'get-buffer args)))
-      ;; Combine output from all buffers, separated by newlines:
+      ;; Combine output from all buffers:
       (mapconcat (lambda (buf)
                    (save-window-excursion
                      (switch-to-buffer buf)
                      (buffer-substring-no-properties (point-min) (point-max))))
-                 buffers "\n")))
+                 buffers)))
 #+end_src
 
 This function allows to redirect one or more buffer content to the eshell, in
