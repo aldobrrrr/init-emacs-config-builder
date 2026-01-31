@@ -128,6 +128,14 @@ that.
   (defvar os-packages-path "~/.emacs.d/modes")
 #+end_src
 
+* Enable Emacs repos
+
+#+begin_src emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/") t)
+#+end_src
+
 * Security
 
 ** GNU Elpa keyring update
@@ -231,14 +239,6 @@ automatically be encrypted.
 #+begin_src emacs-lisp
   ;(setq-default auto-fill-function 'do-auto-fill)
   (setq-default fill-column 79)
-#+end_src
-
-* Enable Emacs repos
-
-#+begin_src emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives
-               '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 #+end_src
 
 * Themes
@@ -596,15 +596,19 @@ around so much.
   (smooth-scrolling-mode))
 #+end_src
 
-** Enable 'ace-window'
+** Ace Window
 
 This package allows to rapidly move between windows.
 
 #+begin_src emacs-lisp
   (use-package ace-window
-    :ensure t)
-
-  (global-set-key (kbd "C-x o") 'ace-window)
+    :ensure t
+    :custom
+    (aw-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?i))
+    :bind
+    (("C-x o" . 'ace-window)
+     ("C-x O" . 'other-window))
+    )
 #+end_src
 
 ** Beacon
@@ -650,12 +654,12 @@ This is an Emacs minor mode to facilitate the process of writing text.
     "Output the contents of one or more buffers as a string. "
     ;; Convert args (either buffer refs or strings) into buffers:
     (let ((buffers (mapcar #'get-buffer args)))
-      ;; Combine output from all buffers, separated by newlines:
+      ;; Combine output from all buffers:
       (mapconcat (lambda (buf)
                    (save-window-excursion
                      (switch-to-buffer buf)
                      (buffer-substring-no-properties (point-min) (point-max))))
-                 buffers "\n")))
+                 buffers)))
 #+end_src
 
 This function allows to redirect one or more buffer content to the eshell, in
@@ -849,7 +853,6 @@ This enables auto-completion menu.
 #+begin_src emacs-lisp
   (use-package company
     :ensure t
-    :defer 2
     :config
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 3)
@@ -859,7 +862,6 @@ This enables auto-completion menu.
     ; completion-at-point-functions facility, and thus works with any major mode
     ; that uses the common protocol.
     (push 'company-capf company-backends)
-    (push 'company-ansible company-backends)
     (global-company-mode 1)
     )
 #+end_src
@@ -880,6 +882,11 @@ the default completion system.
     (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
     :init
     (vertico-mode)
+    :bind (:map vertico-map
+              ;; use vertico insert once we select a prefix from the mini buffer
+              ("C-<tab>" . vertico-insert)
+              ;; Replace `vertico-insert' to enable TAB prefix expansion.
+              ("<tab>" . minibuffer-complete))
     :config
     (vertico-multiform-mode)
     )
@@ -922,9 +929,6 @@ the default completion system.
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
-
-  ;; Replace `vertico-insert' to enable TAB prefix expansion.
-  (keymap-set vertico-map "TAB" #'minibuffer-complete)
 #+end_src
 
 ** Swiper (not used anymore - Use [[* Consult][Consult]])
@@ -1109,6 +1113,8 @@ It's very useful to add forward agent option (*-A*) to TRAMP ssh parameters, in
 this way it's possible to use our ssh key also with nested hosts.
 
 #+begin_src emacs-lisp
+  (when (not (boundp 'tramp-connection-properties))
+    (setq tramp-connection-properties '()))
   (add-to-list 'tramp-connection-properties
                (list (regexp-quote "/ssh:")
                      "login-args"
@@ -1194,6 +1200,21 @@ To open a file it's possible to do as the example below
 #+begin_example
   C-x C-f /lxd:user@container:/path/to/file
 #+end_example
+
+** Multiple cursors
+
+It allows to select multiple cursor and modify them all at once.
+
+#+begin_src emacs-lisp
+  (use-package multiple-cursors
+    :ensure t
+    :config
+    (global-set-key (kbd "C-S-c C-S-c") #'mc/edit-lines)
+    (global-set-key (kbd "C->") #'mc/mark-next-like-this)
+    (global-set-key (kbd "C-<") #'mc/mark-previous-like-this)
+    (global-set-key (kbd "C-c C-<") #'mc/mark-all-like-this)
+    )
+#+end_src
 
 * Restclient (archived - see [[*Verb][verb]])
 
