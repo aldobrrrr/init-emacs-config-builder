@@ -1241,47 +1241,6 @@ An alternative to Restclient which was removed from the MELPA repository
 
 * Syntax modes and programming stuffs
 
-** Language Server Protocol
-
-In combination with a language server it allows to transform Emacs into a
-complete IDE.
-
-#+begin_src emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :commands (lsp lsp-deferred)
-    :init
-    (setq lsp-keymap-prefix "s-l")
-    :hook
-    (
-     (lsp-mode lsp-enable-which-key-integration)
-     )
-    )
-#+end_src
-
-Install the *LSP UI* with the higher level UI modules of /lsp-mode/ like
-flycheck support and code lenses.
-
-#+begin_src emacs-lisp
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode)
-#+end_src
-
-Install the *LSP Treemacs* to integrate a tree view when LSP mode is used.
-
-#+begin_src emacs-lisp
-  (use-package lsp-treemacs
-    :ensure t
-    :commands lsp-treemacs-errors-list)
-#+end_src
-
-For every *language* a *server is needed*. It's possible to download it with
-
-#+begin_src emacs-lisp :tangle no
-  (lsp-install-server)
-#+end_src
-
 ** Flycheck
 
 Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs.
@@ -1341,8 +1300,6 @@ for various languages.
     )
 #+end_src
 
-<<<<<<< Updated upstream
-=======
 ** Exec Path From Shell
 
 This package allows to get variables like $PATH from shell.
@@ -1544,18 +1501,10 @@ For every *language* a *server is needed*. It's possible to download it with
   (lsp-install-server)
 #+end_src
 
->>>>>>> Stashed changes
 ** DAP (debugger)
 
 #+begin_src emacs-lisp
   (use-package dap-mode
-<<<<<<< Updated upstream
-    :ensure t
-    :after lsp-mode
-    :config (dap-auto-configure-mode))
-#+end_src
-
-=======
     :requires lsp-mode
     :ensure t
     :hook ((lsp-mode . dap-auto-configure-mode)
@@ -1568,8 +1517,6 @@ For every *language* a *server is needed*. It's possible to download it with
     (dap-ui-mode -1))
 #+end_src
 
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 ** JSON
 
 #+begin_src emacs-lisp
@@ -1627,23 +1574,6 @@ content when JSON mode is enabled.
 
 ** Java
 
-#+begin_src emacs-lisp
-  (use-package lsp-java
-    :ensure t
-    :config
-    (add-hook 'java-mode-hook 'lsp-deferred))
-#+end_src
-
-Load dap-java package
-
-#+begin_src emacs-lisp
-  (use-package dap-java
-    :ensure nil)
-=======
-<<<<<<< Updated upstream
-=======
-** Java
-
 Load dap-java package
 
 #+begin_src emacs-lisp
@@ -1685,7 +1615,6 @@ Use Eclipse formatter with settings which are coming from [[https://github.com/r
   (setq lsp-java-format-settings-profile "GoogleStyle")
   (setq lsp-java-format-comments-enabled t)
   (setq lsp-java-format-on-type-enabled t)
->>>>>>> Stashed changes
 #+end_src
 
 *** Project Lombok
@@ -1695,45 +1624,8 @@ build tools, spicing up your java. Never write another getter or equals method
 again, with one annotation your class has a fully featured builder, Automate
 your logging variables, and much more.
 
-Lombok jar is needed it's possible to download from [[lombok-download-url][here]], or it's possible to
-run the following src code blocks in order.
-
-#+NAME: lombok-download-url
-#+begin_example
-https://projectlombok.org/downloads/lombok.jar
-#+end_example
- 
-#+begin_src emacs-lisp
-  (setq lombok-dir (expand-file-name ".cache/java-lombok" user-emacs-directory))
-  (setq lombok-jar (concat lombok-dir "/lombok.jar"))
-#+end_src
-
-#+begin_src bash :var lombok_download_url=lombok-download-url lombok_dir=(print lombok-dir) lombok_jar=(print lombok-jar) :tangle no
-    mkdir -p "$lombok_dir"
-    wget "$lombok_download_url" -O "$lombok_jar"
-#+end_src
-
-#+begin_src emacs-lisp
-  (setq lsp-java-vmargs
-        (list
-           "-noverify"
-           "-Xmx1G"
-           "-XX:+UseG1GC"
-           "-XX:+UseStringDeduplication"
-           (concat "-javaagent:" lombok-jar)))
-#+end_src
-
-*** Spring Boot
-
-#+begin_src emacs-lisp
-  (require 'lsp-java-boot)
-
-  ;; to enable the lenses
-  (add-hook 'lsp-mode-hook #'lsp-lens-mode)
-  (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
-=======
 Lombok JAR is needed and it is automatically downloaded.
-
+ 
 #+begin_src emacs-lisp
   (setq lombok-dir (expand-file-name ".cache/java-lombok" user-emacs-directory))
   (setq lombok-jar (concat lombok-dir "/lombok.jar"))
@@ -1752,7 +1644,6 @@ Lombok JAR is needed and it is automatically downloaded.
              "-Xmx2G"
              "-Xms100m"
              (concat "-javaagent:" lombok-jar)))
->>>>>>> Stashed changes
 #+end_src
 
 ** Typescript
@@ -1766,8 +1657,6 @@ Lombok JAR is needed and it is automatically downloaded.
     (setq typescript-indent-level 2))
 #+end_src
 
-<<<<<<< Updated upstream
-=======
 ** Rust
 
 Some binaries have to be installed into the system:
@@ -2024,11 +1913,6 @@ pip install debugpy
       (with-venv (executable-find "python3")))
 #+end_src
 
-<<<<<<< ours
->>>>>>> Stashed changes
-=======
->>>>>>> theirs
->>>>>>> Stashed changes
 ** Enable some languages to be executed inside code blocks
 
 #+begin_src emacs-lisp
