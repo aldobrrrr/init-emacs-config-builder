@@ -880,6 +880,11 @@ the default completion system.
     (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
     :init
     (vertico-mode)
+    :bind (:map vertico-map
+              ;; use vertico insert once we select a prefix from the mini buffer
+              ("C-<tab>" . vertico-insert)
+              ;; Replace `vertico-insert' to enable TAB prefix expansion.
+              ("<tab>" . minibuffer-complete))
     :config
     (vertico-multiform-mode)
     )
@@ -922,9 +927,6 @@ the default completion system.
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
     (completion-category-overrides '((file (styles partial-completion)))))
-
-  ;; Replace `vertico-insert' to enable TAB prefix expansion.
-  (keymap-set vertico-map "TAB" #'minibuffer-complete)
 #+end_src
 
 ** Swiper (not used anymore - Use [[* Consult][Consult]])
