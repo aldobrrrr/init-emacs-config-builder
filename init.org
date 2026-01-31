@@ -1201,6 +1201,21 @@ To open a file it's possible to do as the example below
   C-x C-f /lxd:user@container:/path/to/file
 #+end_example
 
+** Multiple cursors
+
+It allows to select multiple cursor and modify them all at once.
+
+#+begin_src emacs-lisp
+  (use-package multiple-cursors
+    :ensure t
+    :config
+    (global-set-key (kbd "C-S-c C-S-c") #'mc/edit-lines)
+    (global-set-key (kbd "C->") #'mc/mark-next-like-this)
+    (global-set-key (kbd "C-<") #'mc/mark-previous-like-this)
+    (global-set-key (kbd "C-c C-<") #'mc/mark-all-like-this)
+    )
+#+end_src
+
 * Restclient (archived - see [[*Verb][verb]])
 
 See [[http://emacsrocks.com/e15.html][Emacs Rocks! Episode 15]] to learn how restclient can help out with
