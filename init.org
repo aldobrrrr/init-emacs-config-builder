@@ -596,15 +596,19 @@ around so much.
   (smooth-scrolling-mode))
 #+end_src
 
-** Enable 'ace-window'
+** Ace Window
 
 This package allows to rapidly move between windows.
 
 #+begin_src emacs-lisp
   (use-package ace-window
-    :ensure t)
-
-  (global-set-key (kbd "C-x o") 'ace-window)
+    :ensure t
+    :custom
+    (aw-keys '(?a ?b ?c ?d ?e ?f ?g ?h ?i))
+    :bind
+    (("C-x o" . 'ace-window)
+     ("C-x O" . 'other-window))
+    )
 #+end_src
 
 ** Beacon
